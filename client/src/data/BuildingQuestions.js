@@ -1,4 +1,4 @@
-{
+export default {
   "STUDY_QUALITY": [
     {
       "prompt": "How enjoyable is having a lecture in the following buildings?",
@@ -120,4 +120,4 @@
       "filter": ["building", "poi", "residenceHall"]
     }
   ]
-}
+};

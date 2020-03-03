@@ -1,4 +1,4 @@
-[
+export default [
   {
     "prompt": "What grade level are you currently?",
     "type": "CHOOSE_ONE",
@@ -51,4 +51,4 @@
       "Commuter"
     ]
   }
-]
+];
