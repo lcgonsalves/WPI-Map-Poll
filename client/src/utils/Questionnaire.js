@@ -115,8 +115,9 @@ class Questionnaire extends Component {
             <div className="question profile-question" key={"profile_2"}>
                 <h2>{q.prompt}</h2>
                 <h3>{this.helpText.CHOOSE_ONE}</h3>
-                <div className="answers-container" style={{
-                    "maxHeight": "25vh",
+                <div className="answers-container"
+                     id="major-container"
+                     style={{
                     "overflow": "auto",
                     "backgroundColor": "#212121",
                     "borderRadius": "5px",
