@@ -90,7 +90,7 @@ export default {
     {
       "prompt": "Rate each dining hall",
       "type": "RATING",
-      "filter": ["residenceHall"]
+      "filter": ["poi"]
     }
   ],
   "MISC": [

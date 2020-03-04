@@ -1,3 +1,25 @@
-.App {
-  text-align: center;
+/* Smartphones (portrait and landscape) -- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+
+  body {
+    width: 100%;
+  }
+
+}
+
+/* Desktops and laptops ----------- */
+@media only screen
+and (min-width : 1224px) {
+
+  body {
+    width: 100%;
+  }
+
+}
+
+html {
+  width: 100%;
+  background: #1b1b1b;
 }

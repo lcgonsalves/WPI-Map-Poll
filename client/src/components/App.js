@@ -32,13 +32,19 @@ class App extends Component {
   static parseBuildingInformation(geoJSON) {
 
     let buildings = [];
+    const names = {};
 
     // filter by non-street/campus lane features
     geoJSON.features.forEach(
         ({properties}) => {
           if (properties.category !== "street" &&
-              properties.category !== "campusLane")
-            buildings.push(properties);
+              properties.category !== "campusLane") {
+                if (!names[properties.name]) {
+                    buildings.push(properties);
+                    names[properties.name] = true;
+                }
+          }
+
     });
 
     return buildings;

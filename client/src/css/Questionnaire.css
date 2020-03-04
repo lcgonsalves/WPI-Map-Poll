@@ -1,15 +1,186 @@
-.answers-container {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    max-height: 25vh;
-    align-items: stretch;
+/* Smartphones (portrait and landscape) -- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+
+    .progress-overlay {
+        color: rgb(247, 252, 245);
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        text-align: center;
+        height: 6vh;
+        padding-top: 2vh;
+        background: #141414;
+        z-index: 5;
+        border-radius: 4vw 4vw 0 0;
+    }
+
+    .question-container {
+        width: 88vw;
+        margin: 0 auto;
+    }
+
+    .question h3 {
+        font-size: 0.7em;
+        color: #545454;
+        margin-bottom: 4vh;
+    }
+
+    .question h2 {
+        color: #f6f6f6;
+    }
+
+    .question h5 {
+        display: inline;
+        color: #ffffff8c;
+        font-weight: 400;
+        margin-right: 4vw;
+    }
+
+    .question hr {
+        margin: 5vh auto 10vh;
+        width: 45vw;
+    }
+
+    /* Styling Checkbox Starts */
+    .checkbox-label {
+        display: block;
+        padding-left: 15vw;
+        position: relative;
+        cursor: pointer;
+        clear: both;
+    }
+
+    .checkbox-label input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+
+    .answers-container {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+    }
+
+    .answers-container label {
+        text-align: left;
+        color: white;
+        margin: 0 0 1.8vh 0;
+    }
+
+    .answers-container input {
+        text-align: right;
+        padding-right: 2vw;
+        font-weight: bold;
+        color: white;
+        background: none;
+        border: none;
+        border-bottom: #e6e6e6 solid;
+        border-radius: 5px;
+        width: 8vw;
+        height: 3.5vh;
+    }
+
+    .answers-container input:focus {
+        outline: none;
+        border-bottom: #e64d46 solid;
+    }
+
+    /* CUSTOM CHECKBOX */
+    .checkbox-label .checkbox-custom {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 3.5vh;
+        width: 3.5vh;
+        background-color: transparent;
+        border-radius: 5px;
+        transition: all 0.3s ease-out;
+        -webkit-transition: all 0.3s ease-out;
+        -moz-transition: all 0.3s ease-out;
+        -ms-transition: all 0.3s ease-out;
+        -o-transition: all 0.3s ease-out;
+        border: 2px solid #FFFFFF;
+    }
+
+
+    .checkbox-label input:checked ~ .checkbox-custom {
+        background-color: #FFFFFF;
+        border-radius: 5px;
+        -webkit-transform: rotate(0deg) scale(1);
+        -ms-transform: rotate(0deg) scale(1);
+        transform: rotate(0deg) scale(1);
+        opacity:1;
+        border: 2px solid #FFFFFF;
+    }
+
+    p {
+        color: white;
+        font-size: 0.85em;
+    }
+
+    .checkbox-label .checkbox-custom::after {
+        position: absolute;
+        content: "";
+        left: 35%;
+        top: 5%;
+        height: 0px;
+        width: 0px;
+        border-radius: 5px;
+        border: solid #e64d46;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(0deg) scale(0);
+        -ms-transform: rotate(0deg) scale(0);
+        transform: rotate(0deg) scale(0);
+        opacity:1;
+        transition: all 0.3s ease-out;
+        -webkit-transition: all 0.3s ease-out;
+        -moz-transition: all 0.3s ease-out;
+        -ms-transition: all 0.3s ease-out;
+        -o-transition: all 0.3s ease-out;
+    }
+
+
+    .checkbox-label input:checked ~ .checkbox-custom::after {
+        -webkit-transform: rotate(45deg) scale(1);
+        -ms-transform: rotate(45deg) scale(1);
+        transform: rotate(45deg) scale(1);
+        opacity:1;
+        left: 35%;
+        top: 5%;
+        width: 6px;
+        height: 12px;
+        border: solid #e64d46;
+        border-width: 0 2px 2px 0;
+        background-color: transparent;
+        border-radius: 0;
+    }
+
 }
 
-.answers-container label {
-    text-align: left;
-}
+/* Desktops and laptops ----------- */
+@media only screen
+and (min-width : 1224px) {
 
-.answers-container input {
-    margin: 0 2vh;
+    .answers-container {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        max-height: 25vh;
+        align-items: stretch;
+    }
+
+    .answers-container label {
+        text-align: left;
+    }
+
+    .answers-container input {
+        margin: 0 2vh;
+    }
+
 }
