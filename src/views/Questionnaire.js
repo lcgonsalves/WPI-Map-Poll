@@ -12,7 +12,7 @@ import {text} from "d3-fetch";
  */
 class Questionnaire extends Component {
     helpText = {
-        "RATING": "Please rate all the given buildings from 0-10",
+        "RATING": "Please rate all the given buildings from 0-10. If you have no rating for a building, leave blank!",
         "CHOOSE_ONE": "Please pick one answer from the set of answers",
         "CHOOSE_MULTIPLE": "Please pick all answers that apply"
     };
@@ -23,6 +23,8 @@ class Questionnaire extends Component {
         const {
             buildings
         } = props;
+
+        console.log(buildings);
 
         // initialize static profiling questions state tracking
         this.state = {
@@ -188,7 +190,7 @@ class Questionnaire extends Component {
 
             switch (question.type) {
                 case "RATING":
-                    val = 0;
+                    val = "";
                     break;
                 case "CHOOSE_ONE":
                     val = false;
@@ -212,7 +214,7 @@ class Questionnaire extends Component {
 
             switch (question.type) {
                 case "RATING":
-                    val = 0;
+                    val = "";
                     break;
                 case "CHOOSE_ONE":
                     val = false;
@@ -236,7 +238,7 @@ class Questionnaire extends Component {
 
             switch (question.type) {
                 case "RATING":
-                    val = 0;
+                    val = "";
                     break;
                 case "CHOOSE_ONE":
                     val = false;
@@ -496,6 +498,42 @@ class Questionnaire extends Component {
 
     }
 
+    /**
+     * Submits responses to back end API;
+     * @returns {null}
+     */
+    submitResponses() {
+
+        const convertState = () => {
+            return this.props.buildings.map(building => ({
+                "buildingName": building.name,
+                ...this.state[building.name]
+            }));
+        };
+
+        const backEndUrl = "http://localhost:9595/datavis/campus-survey/submit";
+        const init = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                profile: {
+                    "gradeLevel": this.state.gradeLevel,
+                    "age": this.state.age,
+                    "major": this.state.major,
+                    "residence": this.state.residence
+                },
+                response: convertState()
+            })
+        };
+
+        fetch(backEndUrl, init)
+            .then(ans => ans.json())
+            .then(console.log);
+
+    }
+
     render() {
 
         const avoidGrays = (input) => {
@@ -505,7 +543,8 @@ class Questionnaire extends Component {
 
         const progressElementStyle = {
             "color": interpolateGreys(avoidGrays(1 - this.state.percentComplete / 100)),
-            "backgroundColor": interpolateGreens(this.state.percentComplete / 100)
+            "backgroundColor": interpolateGreens(this.state.percentComplete / 100),
+            "cursor": this.state.percentComplete === 100 ? "pointer" : "default"
         };
 
         return (
@@ -524,10 +563,13 @@ class Questionnaire extends Component {
                     <p> About the author</p>
                     <hr/>
                 </div>
-                <div className={"progress-overlay"} style={progressElementStyle}>
+                <div className={"progress-overlay"}
+                     style={progressElementStyle}
+                     onClick={() => this.state.percentComplete < 100 ?
+                         null : this.submitResponses()} >
                     {this.state.percentComplete < 100 ?
                         `${this.state.percentComplete}% Complete${ this.state.percentComplete > 85 ? "! Almost done!" : "."}` :
-                        "You're done! Submit whenever you're ready."
+                        "You're done! Click here to submit!"
                     }
                 </div>
                 {this.renderProfileQuestions()}

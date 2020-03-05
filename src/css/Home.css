@@ -1,0 +1,90 @@
+/* Smartphones (portrait and landscape) -- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+
+    .home {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .home a {
+        height: 38vh;
+        width: 95%;
+        transition: 500ms all;
+        margin-bottom: 2vh;
+        background: white;
+        text-decoration: none;
+        color: white;
+        border-radius: 10px;
+    }
+
+    .home a:hover {
+        background: white;
+        color: #1b1b1b;
+    }
+
+    .home a:visited {
+        color: #1b1b1b;
+    }
+
+    .home div {
+        height: 100%;
+        text-align: center;
+    }
+
+    .home h1 {
+        margin: 35% 0;
+        font-size: 15vw;
+    }
+
+}
+
+/* Desktops and laptops ----------- */
+@media only screen
+and (min-width : 480px) {
+
+    .home {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .home a {
+        height: 48vh;
+        width: 95%;
+        background: #1b1b1b;
+        transition: 500ms all;
+        text-decoration: none;
+        border-radius: 10px;
+    }
+
+    .home a:hover {
+        background: white;
+        color: #1b1b1b;
+    }
+
+    .home h1:hover {
+        color: #1b1b1b;
+    }
+
+    .home a:visited {
+        color: #1b1b1b;
+    }
+
+    .home div {
+        text-align: center;
+    }
+
+    .home h1 {
+        transition: 500ms all;
+        color: white;
+        margin: 15vh 0;
+        font-size: 10vw;
+    }
+}

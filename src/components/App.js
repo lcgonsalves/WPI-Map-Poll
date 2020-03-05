@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import {json} from "d3-fetch";
 import '../css/App.css';
-import Questionnaire from "../utils/Questionnaire";
+import Questionnaire from "../views/Questionnaire";
+import {HashRouter, Route, Switch} from "react-router-dom";
+import Home from "../views/Home";
+import Visualization from "../views/Visualization";
 
 class App extends Component {
 
@@ -54,11 +57,27 @@ class App extends Component {
 
   render() {
 
-    return (
-        <div className="App">
-            {this.state.geoJSON && <Questionnaire buildings={this.state.buildings} />}
-        </div>
-    );
+      return (
+          <HashRouter>
+              <Switch>
+                  <Route path="/survey">
+                      {this.state.geoJSON && <Questionnaire buildings={this.state.buildings} />}
+                  </Route>
+                  <Route path="/vis">
+                      {this.state.geoJSON && <Visualization geoJSON={this.state.geoJSON} />}
+                  </Route>
+                  <Route path="/">
+                      <Home/>
+                  </Route>
+              </Switch>
+          </HashRouter>
+      );
+
+    // return (
+    //     <div className="App">
+    //         {this.state.geoJSON && <Questionnaire buildings={this.state.buildings} />}
+    //     </div>
+    // );
 
   }
 }
