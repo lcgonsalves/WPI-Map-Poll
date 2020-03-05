@@ -5,6 +5,7 @@ import profileQuestions from "../data/ProfileQuestions";
 import {interpolateGreens, interpolateGreys} from "d3-scale-chromatic";
 import "../css/Questionnaire.css";
 import {text} from "d3-fetch";
+import {Redirect} from "react-router-dom";
 
 /**
  * Provides functionality for generating JSX elements for a
@@ -32,7 +33,8 @@ class Questionnaire extends Component {
             "gradeLevel": "Freshman",
             "age": 18,
             "major": "",
-            "residence": ""
+            "residence": "",
+            "formSubmitted": false
         };
 
         // initialize building response state tracking
@@ -530,7 +532,12 @@ class Questionnaire extends Component {
 
         fetch(backEndUrl, init)
             .then(ans => ans.json())
-            .then(console.log);
+            .then(() => {
+                alert("Response successfully submitted!");
+                this.setState({
+                    "formSubmitted": true
+                })
+            });
 
     }
 
@@ -574,6 +581,7 @@ class Questionnaire extends Component {
                 </div>
                 {this.renderProfileQuestions()}
                 {this.renderQuestions()}
+                {this.state.formSubmitted ? <Redirect to="/vis" /> : null}
             </div>
         );
     }

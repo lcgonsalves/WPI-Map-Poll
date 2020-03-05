@@ -314,13 +314,11 @@ class Visualization extends Component {
                 <div className="options-overlay">
                     <select
                         className="select-css"
+                        defaultValue={"Select a Filter!"}
                         onChange={e => this.setState({
                         "selectedMetric": e.target.value,
                         "ranking": this.parseRanking(this.state.data, e.target.value)
                     })}>
-                        <option value="none" selected disabled hidden>
-                            Select a Filter
-                        </option>
                         {DataFetcherAndParser.getAllQuestionIDs().map((question, index) =>
                             <option value={question} key={question + index}>
                                 {DataFetcherAndParser.getQuestionDescriptor(question)}
