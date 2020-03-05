@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/WPI-Map-Poll/precache-manifest.c7ca672f4260e31df6c9782fcabe25d5.js"
+  "/WPI-Map-Poll/precache-manifest.ad85db7d14f48116391318f54cfd3dc7.js"
 );
 
 self.addEventListener('message', (event) => {
