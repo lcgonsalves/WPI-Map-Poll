@@ -7,7 +7,7 @@ import BuildingQuestions from "../data/BuildingQuestions";
  * when fetching responses.
  */
 class DataFetcherAndParser {
-    static url = "http://localhost:9595/datavis/";
+    static url = "https://api.leogons.com/datavis/";
 
     /**
      * Parses data and returns a question-mapped
