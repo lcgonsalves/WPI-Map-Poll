@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/WPI-Map-Poll/static/css/main.03b10330.chunk.css",
+    "main.js": "/WPI-Map-Poll/static/js/main.f8c7c7b5.chunk.js",
+    "main.js.map": "/WPI-Map-Poll/static/js/main.f8c7c7b5.chunk.js.map",
+    "runtime-main.js": "/WPI-Map-Poll/static/js/runtime-main.d3e5991d.js",
+    "runtime-main.js.map": "/WPI-Map-Poll/static/js/runtime-main.d3e5991d.js.map",
+    "static/js/2.4c7960e2.chunk.js": "/WPI-Map-Poll/static/js/2.4c7960e2.chunk.js",
+    "static/js/2.4c7960e2.chunk.js.map": "/WPI-Map-Poll/static/js/2.4c7960e2.chunk.js.map",
+    "index.html": "/WPI-Map-Poll/index.html",
+    "precache-manifest.9b80a1bda7901636dc500cfe260501d0.js": "/WPI-Map-Poll/precache-manifest.9b80a1bda7901636dc500cfe260501d0.js",
+    "service-worker.js": "/WPI-Map-Poll/service-worker.js",
+    "static/css/main.03b10330.chunk.css.map": "/WPI-Map-Poll/static/css/main.03b10330.chunk.css.map",
+    "static/js/2.4c7960e2.chunk.js.LICENSE.txt": "/WPI-Map-Poll/static/js/2.4c7960e2.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d3e5991d.js",
+    "static/js/2.4c7960e2.chunk.js",
+    "static/css/main.03b10330.chunk.css",
+    "static/js/main.f8c7c7b5.chunk.js"
+  ]
+}
