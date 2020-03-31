@@ -3,6 +3,10 @@
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
 
+    body {
+        overflow-y: auto;
+    }
+
     #major-container {
         max-height: 25vh;
     }
@@ -14,7 +18,7 @@ and (max-device-width : 480px) {
         bottom: 0;
         left: 0;
         text-align: center;
-        height: 6vh;
+        height: 8vh;
         padding-top: 2vh;
         background: #141414;
         z-index: 5;
@@ -173,6 +177,11 @@ and (max-device-width : 480px) {
 @media only screen
 and (min-width : 480px) {
 
+    #questionnaire {
+        overflow-y: scroll;
+        height: 100vh;
+    }
+
     .progress-overlay {
         color: rgb(247, 252, 245);
         position: fixed;
@@ -180,7 +189,7 @@ and (min-width : 480px) {
         bottom: 0;
         left: 0;
         text-align: center;
-        height: 6vh;
+        height: 8vh;
         padding-top: 2vh;
         background: #141414;
         z-index: 5;

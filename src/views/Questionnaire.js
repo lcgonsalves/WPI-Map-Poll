@@ -161,7 +161,6 @@ class Questionnaire extends Component {
 
     // mounts scroll listener
     componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll);
     }
 
     // removes scroll listener
@@ -170,9 +169,10 @@ class Questionnaire extends Component {
     }
 
     handleScroll(event) {
-        const maxScroll = document.body.scrollHeight - window.innerHeight;
+        const ROUND_TO_FINISH = 1000;
+
         this.setState({
-            "percentComplete": Math.round((window.scrollY / maxScroll) * 100)
+            "percentComplete": Math.round(((event.target.scrollTop + ROUND_TO_FINISH) / event.target.scrollHeight) * 100)
         });
     }
 
@@ -513,7 +513,7 @@ class Questionnaire extends Component {
             }));
         };
 
-        const backEndUrl = "http://localhost:9595/datavis/campus-survey/submit";
+        const backEndUrl = "https://api.leogons.com/datavis/campus-survey/submit";
         const init = {
             method: 'POST',
             headers: {
@@ -555,33 +555,35 @@ class Questionnaire extends Component {
         };
 
         return (
-            <div className="question-container">
-                <div className="question">
-                    <h2>Welcome to the comprehensive WPI campus survey!</h2>
-                    <h3>A data visualization endeavor by Léo Gonsalves.</h3>
-                    <p>The objective of this project is to gather qualitative data
-                        about different aspects of a variety of WPI locations. The first set of questions
-                        will form a profile of the subject responding to the questionnaire.
-                        Its purpose is to provide a variety of filters to the visualization. </p>
-                    <p> The other sets of questions will require your utmost honesty. Please answer
-                        them as openly as possible, and as thoroughly as possible. Your answers
-                        will help draw an accurate map of WPI from the view of the student body.</p>
-                    <p> A link to the visualization can be found here. </p>
-                    <p> About the author</p>
-                    <hr/>
+            <div id="questionnaire" onScroll={this.handleScroll}>
+                <div className="question-container">
+                    <div className="question">
+                        <h2>Welcome to the comprehensive WPI campus survey!</h2>
+                        <h3>A data visualization endeavor by Léo Gonsalves.</h3>
+                        <p>The objective of this project is to gather qualitative data
+                            about different aspects of a variety of WPI locations. The first set of questions
+                            will form a profile of the subject responding to the questionnaire.
+                            Its purpose is to provide a variety of filters to the visualization. </p>
+                        <p> The other sets of questions will require your utmost honesty. Please answer
+                            them as openly as possible, and as thoroughly as possible. Your answers
+                            will help draw an accurate map of WPI from the view of the student body.</p>
+                        <p> A link to the visualization can be found here. </p>
+                        <p> About the author</p>
+                        <hr/>
+                    </div>
+                    <button className={"progress-overlay"}
+                            style={progressElementStyle}
+                            onClick={() => this.state.percentComplete < 100 ?
+                                null : this.submitResponses()} >
+                        {this.state.percentComplete < 100 ?
+                            `${this.state.percentComplete}% Complete${ this.state.percentComplete > 85 ? "! Almost done!" : "."}` :
+                            "You're done! Click here to submit!"
+                        }
+                    </button>
+                    {this.renderProfileQuestions()}
+                    {this.renderQuestions()}
+                    {this.state.formSubmitted ? <Redirect to="/vis" /> : null}
                 </div>
-                <div className={"progress-overlay"}
-                     style={progressElementStyle}
-                     onClick={() => this.state.percentComplete < 100 ?
-                         null : this.submitResponses()} >
-                    {this.state.percentComplete < 100 ?
-                        `${this.state.percentComplete}% Complete${ this.state.percentComplete > 85 ? "! Almost done!" : "."}` :
-                        "You're done! Click here to submit!"
-                    }
-                </div>
-                {this.renderProfileQuestions()}
-                {this.renderQuestions()}
-                {this.state.formSubmitted ? <Redirect to="/vis" /> : null}
             </div>
         );
     }

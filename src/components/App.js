@@ -11,18 +11,30 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    // separate maps -- fetch streets and buildings separately
+      // figure out how to render streets properly
+      // add some other layers just cause
+
     this.state = {
-      "geoJSON": null,
+      "rawBuildingsJSON": null,
+      "streetsJSON": null,
       "buildings": []
     }
   }
 
   componentDidMount() {
 
+      // buildings
     json("https://raw.githubusercontent.com/lcgonsalves/WPI-Map-Poll/master/map.geojson")
         .then(fetchedJSON => this.setState({
-          "geoJSON": fetchedJSON,
+          "rawBuildingsJSON": fetchedJSON,
           "buildings": App.parseBuildingInformation(fetchedJSON)
+        }));
+
+    // streets
+    json("https://raw.githubusercontent.com/lcgonsalves/WPI-Map-Poll/master/map/roads.geojson")
+        .then(fetchedJSON => this.setState({
+          "streetsJSON": fetchedJSON
         }));
 
   }
@@ -37,11 +49,12 @@ class App extends Component {
     let buildings = [];
     const names = {};
 
+    // todo: get rid of off campus buildings
+
     // filter by non-street/campus lane features
     geoJSON.features.forEach(
         ({properties}) => {
-          if (properties.category !== "street" &&
-              properties.category !== "campusLane") {
+          if (properties.category) {
                 if (!names[properties.name]) {
                     buildings.push(properties);
                     names[properties.name] = true;
@@ -57,14 +70,19 @@ class App extends Component {
 
   render() {
 
+      const loaded = this.state.rawBuildingsJSON && this.state.streetsJSON;
+
       return (
           <HashRouter>
               <Switch>
                   <Route path="/survey">
-                      {this.state.geoJSON && <Questionnaire buildings={this.state.buildings} />}
+                      {this.state.rawBuildingsJSON && <Questionnaire buildings={this.state.buildings} />}
                   </Route>
                   <Route path="/vis">
-                      {this.state.geoJSON && <Visualization geoJSON={this.state.geoJSON} />}
+                      {loaded && <Visualization
+                          rawBuildingsJSON={this.state.rawBuildingsJSON}
+                          streetsJSON={this.state.streetsJSON}
+                      />}
                   </Route>
                   <Route path="/">
                       <Home/>

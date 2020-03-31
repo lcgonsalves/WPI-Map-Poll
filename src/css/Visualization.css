@@ -18,6 +18,10 @@ html {
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
 
+    body {
+        overflow: hidden;
+    }
+
     .title {
         position: absolute;
         width: 45vw;
@@ -127,6 +131,11 @@ and (max-device-width : 480px) {
 /* Desktops and laptops ----------- */
 @media only screen
 and (min-width : 480px) {
+
+    body {
+        overflow: hidden;
+    }
+
     .title {
         position: absolute;
         width: 30vw;

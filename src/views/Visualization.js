@@ -24,12 +24,46 @@ class Visualization extends Component {
     };
 
     colorMap = {
-        "street": "#444",
-        "campusLane": "#7d7d7d",
         "building": "#6b94f2",
         "poi": "#6dc46f",
         "residenceHall": "#b35eb2"
     };
+
+    static getStreetStroke (highwayType) {
+        let width = 7;
+
+        switch(highwayType) {
+            case "footway":
+                return {
+                    "width": "1px",
+                    "type": "dotted"
+                };
+            case "service":
+                width--;
+            case "residential":
+                width--;
+            case "tertiary":
+            case "tertiary_link":
+                width--;
+            case "secondary":
+            case "secondary_link":
+                width--;
+            case "primary":
+            case "primary_link":
+                width--;
+            case "motorway":
+            case "motorway_link":
+                return {
+                    width,
+                    "type": "solid"
+                };
+            default:
+                return {
+                    "width": "2px",
+                    "type": "solid"
+                }
+        }
+    }
 
     constructor(props) {
         super(props);
@@ -74,13 +108,18 @@ class Visualization extends Component {
      * @param metric
      * @returns {{name: string, value: *}[]}
      */
-    parseRanking(data, metric) {
+    parseRanking(data, metric, reverse = false) {
+        console.log( "old ranking: ", this.state.ranking);
+
         const buildingNames = Object.keys(data);
         return buildingNames.map(name => ({
             name,
             "value": data[name][metric]
-        })).sort((a, b) => a.value < b.value ? 1 : -1)
-            .filter(d => typeof(d.value) !== "undefined");
+        })).filter(d => typeof(d.value) !== "undefined").sort((a, b) => {
+            if (a.value < b.value) return reverse ? -1 : 1;
+            else if (a.value === b.value) return 0;
+            else return reverse ? 1 : -1;
+        });
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -113,7 +152,8 @@ class Visualization extends Component {
         };
 
         const {
-            geoJSON
+            rawBuildingsJSON,
+            streetsJSON
         } = this.props;
 
         const {
@@ -123,19 +163,22 @@ class Visualization extends Component {
 
         const svg = select(this.svg.current);
 
-        const noStreets = geoJSON.features.filter(feature => (
-            feature.properties.category !== "street" && feature.properties.category !== "campusLane"
-        ));
+        const campus = [],
+              offCampus = [];
 
-        const onlyStreets = geoJSON.features.filter(feature => (
-            feature.properties.category === "street" || feature.properties.category === "campusLane"
-        ));
+        rawBuildingsJSON.features.forEach(feature => {
+            if (feature.properties.category) {
+                campus.push(feature);
+            } else offCampus.push(feature);
+        });
 
-        const filteredData = {...geoJSON};
-        const streetData = {...geoJSON};
+        const campusData = {...rawBuildingsJSON};
+        const offCampusData = {...rawBuildingsJSON};
 
-        streetData.features = onlyStreets;
-        filteredData.features = noStreets;
+        offCampusData.features = offCampus;
+        campusData.features = campus;
+
+        console.log(campusData, offCampusData);
 
         function reset() {
             updateTooltip(null, false, null);
@@ -167,6 +210,8 @@ class Visualization extends Component {
         function clicked(d) {
             findRankAndUpdateTooltip(d);
 
+            console.log(d);
+
             const [[x0, y0], [x1, y1]] = path.bounds(d);
             event.stopPropagation();
             svg.transition().duration(750).call(
@@ -185,7 +230,7 @@ class Visualization extends Component {
             g.attr("stroke-width", 1 / transform.k);
         }
 
-        const projection = geoMercator().fitExtent([[0, 0], [height, width]], filteredData);
+        const projection = geoMercator().fitExtent([[-100, -350], [height + 100, width + 350]], campusData);
         const path = geoPath().projection(projection);
 
         const zoomFunc = zoom()
@@ -197,25 +242,25 @@ class Visualization extends Component {
 
         const g = svg.append("g").attr("id", "viewport");
 
-        // streets
+        // off campus buildings
         g.append("g")
-            .attr("id", "streets")
+            .attr("id", "off-campus")
             .selectAll("path")
-            .data(streetData.features)
+            .data(offCampusData.features)
             .join("path")
-            .attr("fill",  d => d.properties.category === "campusLane" ? "none" : this.colorMap[d.properties.category])
-            .attr("stroke", d => d.properties.category === "campusLane" ? this.colorMap[d.properties.category] : "none")
-            .attr("stroke-width", d => d.properties.category === "campusLane" ? "3px" : "none")
+            .attr("fill",  "#404040")
+            .attr("stroke", "#2a2a2a")
+            .attr("stroke-width", "2")
             .attr("d", path)
             .append("title")
             .text(d => d.properties.name);
 
-        // buildings and pois etc
+        // campus buildings and pois etc
         g.append("g")
             .attr("cursor", "pointer")
             .attr("id", "buildings")
             .selectAll("path")
-            .data(filteredData.features)
+            .data(campusData.features)
             .join("path")
             .attr("fill", d => this.colorMap[d.properties.category])
             .attr("stroke", "black")
@@ -224,6 +269,20 @@ class Visualization extends Component {
             .attr("d", path)
             .append("title")
             .text(d => d.properties.name);
+
+
+        // streets
+        g.append("g")
+            .attr("id", "streets")
+            .selectAll("path")
+            .data(streetsJSON.features)
+            .join("path")
+            .attr("stroke", d => d.properties.highway === "footway" ? "#2f2f2f" : "#4c4c4c")
+            .attr("fill", "none")
+            .attr("stroke-width", d => Visualization.getStreetStroke(d.properties.highway).width)
+            .attr("d", path)
+            .append("title")
+            .text(d => `${d.properties.name || "pathway"} - ${d.properties.highway}`);
 
         svg.call(zoomFunc);
 
@@ -318,7 +377,7 @@ class Visualization extends Component {
                         onChange={e => this.setState({
                         "selectedMetric": e.target.value,
                         "ranking": this.parseRanking(this.state.data, e.target.value)
-                    })}>
+                    }, () => console.log( "new ranking: ", this.state.ranking))}>
                         <option value="none" disabled hidden>
                             Select a Filter
                         </option>
@@ -363,7 +422,8 @@ class Visualization extends Component {
 }
 
 Visualization.propTypes = {
-    "geoJSON": PropTypes.object.isRequired
+    "rawBuildingsJSON": PropTypes.object.isRequired,
+    "streetsJSON": PropTypes.object.isRequired
 };
 
 export default Visualization;
