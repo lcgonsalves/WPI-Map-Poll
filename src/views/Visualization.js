@@ -103,14 +103,12 @@ class Visualization extends Component {
     }
 
     /**
-     *
      * @param data
      * @param metric
+     * @param reverse
      * @returns {{name: string, value: *}[]}
      */
     parseRanking(data, metric, reverse = false) {
-        console.log( "old ranking: ", this.state.ranking);
-
         const buildingNames = Object.keys(data);
         return buildingNames.map(name => ({
             name,
@@ -178,8 +176,6 @@ class Visualization extends Component {
         offCampusData.features = offCampus;
         campusData.features = campus;
 
-        console.log(campusData, offCampusData);
-
         function reset() {
             updateTooltip(null, false, null);
 
@@ -209,8 +205,6 @@ class Visualization extends Component {
 
         function clicked(d) {
             findRankAndUpdateTooltip(d);
-
-            console.log(d);
 
             const [[x0, y0], [x1, y1]] = path.bounds(d);
             event.stopPropagation();
@@ -377,7 +371,7 @@ class Visualization extends Component {
                         onChange={e => this.setState({
                         "selectedMetric": e.target.value,
                         "ranking": this.parseRanking(this.state.data, e.target.value)
-                    }, () => console.log( "new ranking: ", this.state.ranking))}>
+                    })}>
                         <option value="none" disabled hidden>
                             Select a Filter
                         </option>
