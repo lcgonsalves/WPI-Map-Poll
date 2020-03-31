@@ -347,7 +347,7 @@ class Visualization extends Component {
             if (DataFetcherAndParser.getTypeOf(selectedMetric) !== "RATING") {
                 return `${DataFetcherAndParser.getQuestionDescriptor(selectedMetric)} : ${tooltip.rank}`;
             } else { // show rating
-                const rating = data[tooltip.locationName] ? data[tooltip.locationName][selectedMetric] : "Unavailable";
+                const rating = data[tooltip.locationName] ? Number(data[tooltip.locationName][selectedMetric]).toFixed(2) : "Unavailable";
                 return `${DataFetcherAndParser.getQuestionDescriptor(selectedMetric)} : ${rating ? rating : "None"}`
             }
         };
@@ -391,11 +391,13 @@ class Visualization extends Component {
                         "background": this.colorMap[tooltip.locationCategory]
                     }}>{tooltip.locationName}</h1>
                     <h1 style={{
+                        "display": data[tooltip.locationName] && data[tooltip.locationName][selectedMetric] ? "flex" : "none",
                         "background": data[tooltip.locationName] && data[tooltip.locationName][selectedMetric] ?
                             interpolateRdYlGn(1 - tooltip.rank / ranking.length) :
                             "rgba(126,126,126,0.58)"
                     }}>{subtitleLogic()}</h1>
                     <h1 style={{
+                        "display": data[tooltip.locationName] && data[tooltip.locationName][selectedMetric] ? "flex" : "none",
                         "background": data[tooltip.locationName] && data[tooltip.locationName][selectedMetric] ?
                             DataFetcherAndParser.getColor(selectedMetric, data[tooltip.locationName][selectedMetric] / 10) :
                             "rgba(126,126,126,0.58)"

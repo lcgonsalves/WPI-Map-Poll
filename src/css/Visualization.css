@@ -101,7 +101,8 @@ and (max-device-width : 480px) {
     .information-overlay {
         position: absolute;
         width: 85vw;
-        height: 20vh;
+        min-height: 8vh;
+        max-height: 20vh;
         border-radius: 5px;
         background: #f9f9f9;
         left: 1.8vh;
@@ -115,7 +116,7 @@ and (max-device-width : 480px) {
 
     .information-overlay h1 {
         font-size: 0.95em;
-        height: 35%;
+        height: 6vh;
         background: #f6f6f6;
         color: #3e3d3d;
         border-radius: 5px;
@@ -214,7 +215,8 @@ and (min-width : 480px) {
     .information-overlay {
         position: absolute;
         width: 30vw;
-        height: 20vh;
+        min-height: 8vh;
+        max-height: 20vh;
         border-radius: 5px;
         background: #f9f9f9;
         right: 1vh;
@@ -228,7 +230,7 @@ and (min-width : 480px) {
 
     .information-overlay h1 {
         font-size: 1.23em;
-        height: 35%;
+        height: 6vh;
         background: #f6f6f6;
         color: #3e3d3d;
         border-radius: 5px;

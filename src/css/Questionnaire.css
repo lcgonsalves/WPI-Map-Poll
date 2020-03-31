@@ -3,9 +3,11 @@
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
 
-    body {
-        overflow-y: auto;
+    #questionnaire {
+        overflow-y: scroll;
+        height: 100vh;
     }
+
 
     #major-container {
         max-height: 25vh;
