@@ -257,6 +257,7 @@ class Visualization extends Component {
             .data(campusData.features)
             .join("path")
             .attr("fill", d => this.colorMap[d.properties.category])
+            .attr("id", d => `path-${String(d.properties.name).replace(/\s/g, '-').toLowerCase()}`)
             .attr("stroke", "black")
             .attr("stroke-width", 0.5)
             .on("click", clicked)
@@ -297,7 +298,9 @@ class Visualization extends Component {
 
         const path = select(this.svg.current)
             .select("#buildings")
-            .selectAll("path");
+            .selectAll("path")
+            .transition()
+            .delay(150);
 
         // create fill logic for rank-like data
         if (DataFetcherAndParser.getTypeOf(selectedMetric) === "RATING") {
