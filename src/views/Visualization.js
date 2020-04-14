@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, useContext} from "react";
 import PropTypes from "prop-types";
 import {geoMercator, geoPath} from "d3-geo";
 import {event, mouse, select} from "d3-selection";
@@ -8,10 +8,11 @@ import {extent} from "d3-array";
 import DataFetcherAndParser from "../utils/DataFetcherAndParser";
 import {interpolateRdYlGn} from "d3-scale-chromatic";
 import initTour from "../utils/ShepherdTourSetup";
+import storageAvailable from "../utils/LocalStorageUtil";
 
+// css
 import "../css/Visualization.css";
 import "../css/Tour.css";
-import storageAvailable from "../utils/LocalStorageUtil";
 
 class Visualization extends Component {
     dimensions = {
@@ -362,12 +363,6 @@ class Visualization extends Component {
         }
 
 
-        // todo: change building colors based on selected parameter
-        // todo: change building opacity if parameter does not include building
-        // todo: render histogram on side view to compare building with others
-        // todo: keep track of tooltip state and update it with state updates
-        // todo: implement back end to start gathering data
-
     }
 
     render() {
@@ -437,6 +432,7 @@ class Visualization extends Component {
                 <div className={`title show-${!tooltip.display}`}>
                     <h1>WPI Campus</h1>
                     <h3>Through Different Lenses</h3>
+                    <TourComponent/>
                 </div>
                 <div className={`information-overlay show-${tooltip.display}`}>
                     <h1 id="tooltip-title" style={{
