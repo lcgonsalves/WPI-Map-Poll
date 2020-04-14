@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, useContext} from "react";
 import PropTypes from "prop-types";
 import {geoMercator, geoPath} from "d3-geo";
 import {event, mouse, select} from "d3-selection";
@@ -8,6 +8,13 @@ import {extent} from "d3-array";
 import DataFetcherAndParser from "../utils/DataFetcherAndParser";
 import "../css/Visualization.css";
 import {interpolateRdYlGn} from "d3-scale-chromatic";
+import {ShepherdTourContext} from "react-shepherd";
+
+const TourComponent = () => {
+    const tour = useContext(ShepherdTourContext);
+
+    return <button style={{"width": "5%"}} onClick={tour.start}>?</button>
+};
 
 class Visualization extends Component {
     dimensions = {
@@ -257,6 +264,7 @@ class Visualization extends Component {
             .data(campusData.features)
             .join("path")
             .attr("fill", d => this.colorMap[d.properties.category])
+            .attr("id", d => "building-" + String(d.properties.name).replace(/\s/g, ''))
             .attr("stroke", "black")
             .attr("stroke-width", 0.5)
             .on("click", clicked)
@@ -297,7 +305,9 @@ class Visualization extends Component {
 
         const path = select(this.svg.current)
             .select("#buildings")
-            .selectAll("path");
+            .selectAll("path")
+            .transition()
+            .delay(150);
 
         // create fill logic for rank-like data
         if (DataFetcherAndParser.getTypeOf(selectedMetric) === "RATING") {
@@ -324,12 +334,6 @@ class Visualization extends Component {
 
         }
 
-
-        // todo: change building colors based on selected parameter
-        // todo: change building opacity if parameter does not include building
-        // todo: render histogram on side view to compare building with others
-        // todo: keep track of tooltip state and update it with state updates
-        // todo: implement back end to start gathering data
 
     }
 
@@ -385,6 +389,7 @@ class Visualization extends Component {
                 <div className={`title show-${!tooltip.display}`}>
                     <h1>WPI Campus</h1>
                     <h3>Through Different Lenses</h3>
+                    <TourComponent/>
                 </div>
                 <div className={`information-overlay show-${tooltip.display}`}>
                     <h1 style={{

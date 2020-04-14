@@ -1,10 +1,22 @@
-import React, {Component} from 'react';
+import React, {Component, useContext} from 'react';
+import {ShepherdTour, ShepherdTourContext} from 'react-shepherd';
+import "../../node_modules/shepherd.js/dist/css/shepherd.css";
 import {json} from "d3-fetch";
 import '../css/App.css';
 import Questionnaire from "../views/Questionnaire";
 import {HashRouter, Route, Switch} from "react-router-dom";
 import Home from "../views/Home";
 import Visualization from "../views/Visualization";
+import TourSteps from "../utils/TourSteps";
+
+const tourOptions = {
+    defaultStepOptions: {
+        cancelIcon: {
+            enabled: true
+        }
+    },
+    useModalOverlay: true
+};
 
 class App extends Component {
 
@@ -72,6 +84,11 @@ class App extends Component {
 
       const loaded = this.state.rawBuildingsJSON && this.state.streetsJSON;
 
+      const vis = <Visualization
+          rawBuildingsJSON={this.state.rawBuildingsJSON}
+          streetsJSON={this.state.streetsJSON}
+      />;
+
       return (
           <HashRouter>
               <Switch>
@@ -79,10 +96,7 @@ class App extends Component {
                       {this.state.rawBuildingsJSON && <Questionnaire buildings={this.state.buildings} />}
                   </Route>
                   <Route path="/vis">
-                      {loaded && <Visualization
-                          rawBuildingsJSON={this.state.rawBuildingsJSON}
-                          streetsJSON={this.state.streetsJSON}
-                      />}
+                      {loaded && <ShepherdTour steps={TourSteps} tourOptions={tourOptions}>{vis}</ShepherdTour>}
                   </Route>
                   <Route path="/">
                       <Home/>

@@ -11,6 +11,7 @@ html {
 .show-false {
     opacity: 0;
     color: white;
+    pointer-events: none;
 }
 
 /* Smartphones (portrait and landscape) -- */
