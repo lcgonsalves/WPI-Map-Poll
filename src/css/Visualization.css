@@ -19,6 +19,23 @@ html {
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
 
+    #help-button {
+        position: absolute;
+        border-radius: 50%;
+        height: 5.5vh;
+        width: 5.5vh;
+        font-size: 2vh;
+        color: white;
+        background: transparent;
+        border: solid white;
+        bottom: 2vh;
+        right: 2vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: help;
+    }
+
     body {
         overflow: hidden;
     }
@@ -96,7 +113,7 @@ and (max-device-width : 480px) {
         position: absolute;
         top: 2vh;
         right: 2vh;
-
+        padding-bottom: 1.5vh;
     }
 
     .information-overlay {
@@ -133,6 +150,23 @@ and (max-device-width : 480px) {
 /* Desktops and laptops ----------- */
 @media only screen
 and (min-width : 480px) {
+
+    #help-button {
+        position: absolute;
+        border-radius: 50%;
+        height: 3.5vh;
+        width: 3.5vh;
+        font-size: 2vh;
+        color: white;
+        background: transparent;
+        border: solid white;
+        bottom: 1vh;
+        left: 1vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: help;
+    }
 
     body {
         overflow: hidden;
@@ -210,7 +244,8 @@ and (min-width : 480px) {
         position: absolute;
         top: 2vh;
         right: 2vh;
-
+        padding-left: 4vh;
+        padding-bottom: 4vh;
     }
 
     .information-overlay {

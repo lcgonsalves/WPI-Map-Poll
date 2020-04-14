@@ -6,15 +6,13 @@ import {scaleLinear} from "d3-scale";
 import {zoom, zoomIdentity, zoomTransform} from "d3-zoom";
 import {extent} from "d3-array";
 import DataFetcherAndParser from "../utils/DataFetcherAndParser";
-import "../css/Visualization.css";
 import {interpolateRdYlGn} from "d3-scale-chromatic";
-import {ShepherdTourContext} from "react-shepherd";
+import initTour from "../utils/ShepherdTourSetup";
+import storageAvailable from "../utils/LocalStorageUtil";
 
-const TourComponent = () => {
-    const tour = useContext(ShepherdTourContext);
-
-    return <button style={{"width": "5%"}} onClick={tour.start}>?</button>
-};
+// css
+import "../css/Visualization.css";
+import "../css/Tour.css";
 
 class Visualization extends Component {
     dimensions = {
@@ -90,6 +88,9 @@ class Visualization extends Component {
 
         this.svg = React.createRef();
 
+        // initialize shepherd-js tour
+        this.tour = initTour();
+
         // bind
         this.d3RenderMap = this.d3RenderMap.bind(this);
     }
@@ -106,6 +107,16 @@ class Visualization extends Component {
                 "data": body,
                 "ranking": this.parseRanking(body, this.state.selectedMetric)
             }));
+
+        // start tour if first time visiting
+        if (storageAvailable() && !localStorage.getItem("visited")) {
+
+            localStorage.setItem("visited", "true");
+            this.tour.start();
+
+        } else if (storageAvailable() && localStorage.getItem("visited")) {
+            // do nothing
+        } else this.tour.start();
 
     }
 
@@ -210,9 +221,26 @@ class Visualization extends Component {
             updateTooltip(d.properties.name, true, undefined, null, d.properties.category);
         };
 
+        const advanceTour = buildingName => {
+
+            // advance tour on metric change if current step is appropriate
+            if (this.tour.getCurrentStep() &&
+                this.tour.getCurrentStep().id === "step-02-select-element" &&
+                buildingName === "Higgins Labs"
+            ) {
+                this.tour.next();
+            }
+
+        };
+
         function clicked(d) {
+            // updates tooltip
             findRankAndUpdateTooltip(d);
 
+            // moves tour forward if appropriate
+            advanceTour(d.properties.name);
+
+            // zooms
             const [[x0, y0], [x1, y1]] = path.bounds(d);
             event.stopPropagation();
             svg.transition().duration(750).call(
@@ -264,7 +292,7 @@ class Visualization extends Component {
             .data(campusData.features)
             .join("path")
             .attr("fill", d => this.colorMap[d.properties.category])
-            .attr("id", d => "building-" + String(d.properties.name).replace(/\s/g, ''))
+            .attr("id", d => `path-${String(d.properties.name).replace(/\s/g, '-').toLowerCase()}`)
             .attr("stroke", "black")
             .attr("stroke-width", 0.5)
             .on("click", clicked)
@@ -368,14 +396,29 @@ class Visualization extends Component {
 
         return (
             <div>
-                <div className="options-overlay">
+                <div title="List of metrics available to filter data" className="options-overlay">
                     <select
                         className="select-css"
                         defaultValue="none"
-                        onChange={e => this.setState({
-                        "selectedMetric": e.target.value,
-                        "ranking": this.parseRanking(this.state.data, e.target.value)
-                    })}>
+                        onChange={e => {
+
+                            const curTourStep = this.tour.getCurrentStep();
+
+                            // advance tour on metric change if current step is appropriate
+                            if (curTourStep &&
+                                curTourStep.id === "step-01-metric" &&
+                                e.target.value === "STUDY_QUALITY_4" // group meeting accommodation rating (TODO: not hardcode it)
+                            ) {
+                                this.tour.next();
+                            }
+
+                            // update metric and ranking
+                            this.setState({
+                                "selectedMetric": e.target.value,
+                                "ranking": this.parseRanking(this.state.data, e.target.value)
+                            });
+
+                        }}>
                         <option value="none" disabled hidden>
                             Select a Filter
                         </option>
@@ -392,22 +435,23 @@ class Visualization extends Component {
                     <TourComponent/>
                 </div>
                 <div className={`information-overlay show-${tooltip.display}`}>
-                    <h1 style={{
+                    <h1 id="tooltip-title" style={{
                         "background": this.colorMap[tooltip.locationCategory]
                     }}>{tooltip.locationName}</h1>
-                    <h1 style={{
+                    <h1 id="tooltip-value" style={{
                         "display": data[tooltip.locationName] && data[tooltip.locationName][selectedMetric] ? "flex" : "none",
                         "background": data[tooltip.locationName] && data[tooltip.locationName][selectedMetric] ?
                             interpolateRdYlGn(1 - tooltip.rank / ranking.length) :
                             "rgba(126,126,126,0.58)"
                     }}>{subtitleLogic()}</h1>
-                    <h1 style={{
+                    <h1  id="tooltip-rank" style={{
                         "display": data[tooltip.locationName] && data[tooltip.locationName][selectedMetric] ? "flex" : "none",
                         "background": data[tooltip.locationName] && data[tooltip.locationName][selectedMetric] ?
                             DataFetcherAndParser.getColor(selectedMetric, data[tooltip.locationName][selectedMetric] / 10) :
                             "rgba(126,126,126,0.58)"
                     }}>{rankLogic()}</h1>
                 </div>
+                <button title="How to navigate this visualization" id="help-button" onClick={this.tour.start}>?</button>
                 <svg
                     id="d3Node"
                     height="100vh"
