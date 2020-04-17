@@ -432,7 +432,6 @@ class Visualization extends Component {
                 <div className={`title show-${!tooltip.display}`}>
                     <h1>WPI Campus</h1>
                     <h3>Through Different Lenses</h3>
-                    <TourComponent/>
                 </div>
                 <div className={`information-overlay show-${tooltip.display}`}>
                     <h1 id="tooltip-title" style={{

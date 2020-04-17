@@ -1,5 +1,4 @@
 import React, {Component, useContext} from 'react';
-import {ShepherdTour, ShepherdTourContext} from 'react-shepherd';
 import "../../node_modules/shepherd.js/dist/css/shepherd.css";
 import {json} from "d3-fetch";
 import '../css/App.css';
@@ -96,7 +95,7 @@ class App extends Component {
                       {this.state.rawBuildingsJSON && <Questionnaire buildings={this.state.buildings} />}
                   </Route>
                   <Route path="/vis">
-                      {loaded && <ShepherdTour steps={TourSteps} tourOptions={tourOptions}>{vis}</ShepherdTour>}
+                      {loaded && vis}
                   </Route>
                   <Route path="/">
                       <Home/>
