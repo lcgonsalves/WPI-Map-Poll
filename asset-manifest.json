@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/WPI-Map-Poll/static/css/main.bbffae96.css",
+    "main.css": "/WPI-Map-Poll/static/css/main.6e239e8b.css",
     "main.js": "/WPI-Map-Poll/static/js/main.2db1b10f.js",
     "index.html": "/WPI-Map-Poll/index.html",
-    "main.bbffae96.css.map": "/WPI-Map-Poll/static/css/main.bbffae96.css.map",
+    "main.6e239e8b.css.map": "/WPI-Map-Poll/static/css/main.6e239e8b.css.map",
     "main.2db1b10f.js.map": "/WPI-Map-Poll/static/js/main.2db1b10f.js.map"
   },
   "entrypoints": [
-    "static/css/main.bbffae96.css",
+    "static/css/main.6e239e8b.css",
     "static/js/main.2db1b10f.js"
   ]
 }
